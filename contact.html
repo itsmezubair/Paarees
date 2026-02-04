@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | PAAREES</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body id="top">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="brand-font loader-logo">PAAREES</div>
+            <div class="loader-line"></div>
+            <p class="text-uppercase small text-muted letter-spacing-2">Loading Service...</p>
+        </div>
+    </div>
+
+    <!-- 1. Navbar Container (Dynamic) -->
+    <div id="navbar-container"></div>
+
+    <!-- Page Header -->
+    <header class="page-header-section mt-5">
+        <div class="container text-center pt-5">
+            <h1 class="display-4 brand-font text-gold animate__animated animate__fadeInUp">Customer Service</h1>
+            <p class="lead text-muted animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">We Are Here To Help</p>
+        </div>
+    </header>
+
+    <!-- 7. Location Section -->
+    <section id="location" class="section-padding">
+        <div class="container reveal">
+            <div class="section-header">
+                <p>Get in Touch</p>
+                <h2>Customer Service</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-5 mb-5 mb-md-0">
+                    <h4 class="text-heading mb-4">Paris Boutique</h4>
+                    <p class="text-muted mb-3"><i class="fas fa-map-marker-alt text-warning me-3"></i> 123 Luxury Lane, Perfume District<br><span class="ms-4">Paris, France 75001</span></p>
+                    <p class="text-muted mb-3"><i class="fas fa-phone text-warning me-3"></i> +33 1 98 76 54 32</p>
+                    <p class="text-muted mb-3"><i class="fas fa-envelope text-warning me-3"></i> info@paareesperfumes.com</p>
+                    
+                    <div class="mt-5 p-4 border border-secondary bg-card">
+                        <h5 class="text-heading mb-3 small text-uppercase letter-spacing-2">Trade & Wholesale</h5>
+                        <p class="small text-muted mb-3">Retail partners can access our catalog below.</p>
+                        <!-- <button onclick="downloadPriceList()" class="btn btn-outline-secondary btn-sm rounded-0 w-100 text-uppercase">
+                            <i class="fas fa-download me-2"></i> Download Price List
+                        </button> -->
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <h4 class="text-heading mb-4">Send an Inquiry</h4>
+                    <form id="contact-form" novalidate>
+                        <div class="mb-4">
+                            <input type="text" id="contact-name" class="form-control bg-card text-main border-secondary rounded-0 p-3" placeholder="YOUR NAME">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" id="contact-email" class="form-control bg-card text-main border-secondary rounded-0 p-3" placeholder="EMAIL ADDRESS">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="mb-4">
+                            <textarea id="contact-message" class="form-control bg-card text-main border-secondary rounded-0 p-3" rows="4" placeholder="HOW MAY WE ASSIST YOU?"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <button type="submit" class="btn-gold w-100">Contact Us</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Footer Container (Dynamic) -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="custom-toast rounded">
+        <div class="d-flex align-items-center">
+            <i id="toast-icon" class="fas fa-check-circle text-warning me-3 fa-lg"></i>
+            <div>
+                <strong id="toast-title" class="d-block text-uppercase letter-spacing-1">Success</strong>
+                <span class="small opacity-75" id="toast-msg">Request processed.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title brand-font" id="cartOffcanvasLabel">Your Selection</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <div id="cart-items-container" class="flex-grow-1 overflow-auto mb-3">
+                <div class="text-center text-muted mt-5">
+                    <i class="fas fa-shopping-bag fa-3x mb-3 opacity-25"></i>
+                    <p>Your cart is empty.</p>
+                </div>
+            </div>
+            <div class="border-top pt-3">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-uppercase letter-spacing-1">Subtotal</span>
+                    <strong id="cart-total">$0.00</strong>
+                </div>
+                <button class="btn-gold w-100 mb-2" onclick="checkout()">Proceed to Checkout</button>
+                <button class="btn btn-outline-secondary w-100 rounded-30 text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;" data-bs-dismiss="offcanvas">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

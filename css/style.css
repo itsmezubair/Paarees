@@ -1,0 +1,437 @@
+/* 
+   My Project Stylesheet 
+   Student Name: [Your Name Here]
+   Aptech Semester 1 Project
+*/
+
+/* --- 1. Color Variables --- */
+:root {
+    --gold: #D4AF37;
+    --gold-light: #F4C430;
+    --bg-body: #ffffff;
+    --bg-card: #f8f9fa;
+    --bg-navbar: rgba(255, 255, 255, 0.95);
+    --bg-footer: #f1f1f1;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --text-heading: #111111;
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+[data-bs-theme="dark"] {
+    --bg-body: #050505;
+    --bg-card: #121212;
+    --bg-navbar: rgba(5, 5, 5, 0.85);
+    --bg-footer: #020202;
+    --text-main: #B0B0B0;
+    --text-muted: #888888;
+    --text-heading: #FFFFFF;
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --card-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* --- 2. General Body Setup --- */
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    overflow-x: hidden; /* Prevents horizontal scroll */
+    scroll-behavior: smooth;
+    transition: 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, .brand-font {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 2px;
+    color: var(--text-heading);
+}
+
+.serif-italic {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+}
+
+/* --- 3. Preloader --- */
+#preloader {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-body);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease-out;
+}
+
+.loader-content { text-align: center; }
+
+.loader-logo { 
+    font-size: 3rem; 
+    color: var(--gold); 
+    animation: pulseGold 2s infinite; 
+}
+
+.loader-line { 
+    width: 0; height: 2px; 
+    background: var(--gold); 
+    margin: 20px auto; 
+    animation: expandLine 1.5s ease-in-out forwards; 
+}
+
+@keyframes pulseGold {
+    0% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.2); opacity: 0.8; }
+    50% { text-shadow: 0 0 30px rgba(212, 175, 55, 0.8); opacity: 1; }
+    100% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.2); opacity: 0.8; }
+}
+
+@keyframes expandLine { to { width: 100px; } }
+
+/* --- 4. Custom Scrollbar --- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-body); }
+::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* --- 5. Navbar Styling --- */
+.navbar {
+    background-color: rgba(216, 178, 178, 0.537); /* Slightly transparent white */
+    backdrop-filter: blur(15px); /* Glass effect */
+    border-bottom: 1px solid var(--glass-border);
+    padding: 10px 20px;
+    transition: all 0.4s ease;
+    
+    /* Centering and sizing */
+    width: 90%; 
+    max-width: 1200px;
+    left: 50%;
+    transform: translateX(-50%); 
+    top: 20px;
+    border-radius: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.nav-link {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--text-heading) !important;
+    margin: 0 12px;
+    position: relative;
+    opacity: 0.8;
+    transition: 0.3s;
+    font-weight: 600;
+}
+
+.nav-link:hover, .nav-link.active {
+    opacity: 1;
+    color: var(--gold) !important;
+}
+
+.nav-link::after {
+    content: ''; position: absolute; bottom: -5px; left: 50%;
+    width: 0; height: 1px; background: var(--gold);
+    transition: 0.4s ease; transform: translateX(-50%);
+}
+.nav-link:hover::after { width: 100%; }
+
+.dropdown-menu {
+    background-color: rgba(216, 178, 178, 0.537);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    margin-top: 15px;
+    box-shadow: var(--card-shadow);
+}
+
+.dropdown-item {
+    color: var(--text-main);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 12px 25px;
+    transition: 0.3s;
+}
+.dropdown-item:hover {
+    background-color: transparent;
+    color: var(--gold);
+    padding-left: 30px;
+}
+
+/* --- 6. Hero Section --- */
+.hero-section {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
+     url('../images/BANNER1.png');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.hero-content { padding-top: 80px; }
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    margin-bottom: 1.5rem;
+    color: var(--gold-light); 
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    font-weight: 700;
+}
+
+.btn-gold {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    padding: 12px 30px; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-gold::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%;
+    background: var(--gold); z-index: -1; transition: 0.4s ease;
+}
+
+.btn-gold:hover {
+    color: #fff !important;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+.btn-gold:hover::before { width: 100%; }
+
+/* --- 7. Sticky Sidebar (The Fix) --- */
+/* This ensures the filter sidebar stays visible while scrolling products */
+.sticky-sidebar {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 120px; /* Offset from the top */
+    z-index: 10;
+    padding-top: 20px;
+    /* Scrollable Fix */
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    /* Hide Scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+.sticky-sidebar::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+/* Cart Badge & Button Styles */
+.nav-icon-btn {
+    position: relative;
+    background: none;
+    border: none;
+    color: var(--text-heading);
+    font-size: 1.2rem;
+    margin-left: 15px;
+    transition: 0.3s;
+}
+.nav-icon-btn:hover { color: var(--gold); }
+
+.cart-badge {
+    position: absolute;
+    top: -5px; right: -8px;
+    background: var(--gold);
+    color: #fff;
+    font-size: 0.7rem;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold;
+}
+
+.btn-add-cart {
+    background: var(--gold);
+    color: #fff;
+    border: 1px solid var(--gold);
+    width: 50%;
+    padding: 8px 0;
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    letter-spacing: 2px;
+    margin-top: 5px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.btn-add-cart:hover {
+    background: #fff;
+    color: var(--gold);
+}
+
+.cart-item-img {
+    width: 60px; height: 60px; object-fit: cover; border: 1px solid var(--glass-border);
+}
+
+/* --- 8. Section Styling --- */
+.section-padding { padding: 60px 0; position: relative; }
+
+.section-header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.section-header h2 { font-size: 2.5rem; margin-bottom: 15px; color: var(--text-heading); }
+.section-header p { font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.1rem; }
+
+.section-header .divider {
+    height: 1px; width: 100px; 
+    background: linear-gradient(90deg, transparent, var(--gold), transparent); 
+    margin: 20px auto;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s ease;
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- 9. Gallery --- */
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+    border: 1px solid var(--glass-border);
+}
+
+.gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.gallery-item:hover img { transform: scale(1.1); }
+
+.gallery-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4); opacity: 0; transition: 0.4s;
+    display: flex; align-items: center; justify-content: center;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+
+/* --- 10. Product Cards --- */
+.product-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: var(--card-shadow);
+}
+
+.product-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(212, 175, 55, 0.15);
+}
+
+.card-img-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* Square image */
+    overflow: hidden;
+    background: #e0e0e0; 
+}
+
+.card-img-wrapper img {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.product-card:hover .card-img-wrapper img { transform: scale(1.1); }
+
+.card-badge {
+    position: absolute; top: 15px; left: 15px;
+    background: var(--gold); color: #000;
+    font-size: 0.6rem; font-weight: 700;
+    text-transform: uppercase; padding: 4px 10px;
+    letter-spacing: 1px; z-index: 2;
+}
+
+.card-info { padding: 20px; text-align: center; }
+.card-brand { color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 5px; }
+.card-title { font-family: 'Cinzel', serif; font-size: 1.1rem; margin: 5px 0; color: var(--text-heading); font-weight: 600;}
+.card-price { font-weight: 400; color: var(--text-main); font-family: 'Lato', sans-serif; margin-bottom: 10px; }
+.card-rating { color: var(--gold); font-size: 0.7rem; margin: 5px 0; }
+
+.btn-card {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+    background: transparent; border: 1px solid var(--text-muted); color: var(--text-heading);
+    padding: 8px 0; width: 100%; margin-top: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.btn-card:hover { border-color: var(--gold); color: var(--gold); }
+
+/* --- 11. Testimonials --- */
+.testimonial-card {
+    background: var(--bg-card); padding: 40px; border: 1px solid var(--glass-border); text-align: center; margin: 15px;
+    box-shadow: var(--card-shadow);
+}
+.quote-icon { font-size: 2rem; color: var(--gold); margin-bottom: 20px; opacity: 0.5; }
+.testimonial-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; color: var(--text-muted); margin-bottom: 20px; }
+
+/* --- 12. Footer --- */
+footer { 
+    background-color: var(--bg-footer); 
+    border-top: 1px solid var(--glass-border); 
+    padding: 80px 0 20px; 
+    color: var(--text-muted); 
+}
+footer h5 { color: var(--text-heading); margin-bottom: 20px; font-size: 0.9rem; }
+footer ul { padding: 0; list-style: none; }
+footer ul li { margin-bottom: 10px; }
+footer a { color: var(--text-muted); text-decoration: none; transition: 0.3s; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+footer a:hover { color: var(--gold); }
+.social-link { width: 35px; height: 35px; border: 1px solid var(--glass-border); display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; margin-right: 10px; transition: 0.3s; }
+.social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+/* --- 13. Toast Notification --- */
+.custom-toast {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--bg-navbar); color: var(--text-heading); padding: 15px 25px;
+    border-left: 3px solid var(--gold); z-index: 9999; display: none;
+    backdrop-filter: blur(5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: slideInRight 0.5s ease;
+}
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+/* Helpers */
+.bg-black-adaptive { background-color: #f1f1f1; } 
+[data-bs-theme="dark"] .bg-black-adaptive { background-color: #000; } 
+
+.page-header-section {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/BANNER1.png');
+    background-size: cover;
+    background-position: center;
+    padding: 100px 0 60px !important;
+    color: white;
+}
+.page-header-section h1 { color: var(--gold) !important; }
+.page-header-section p { color: rgba(255,255,255,0.8) !important; } 

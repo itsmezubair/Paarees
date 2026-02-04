@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAAREES | The Essence of Luxury</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body id="top">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="brand-font loader-logo">PAAREES</div>
+            <div class="loader-line"></div>
+            <p class="text-uppercase small text-muted letter-spacing-2">Loading...</p>
+        </div>
+    </div>
+
+    <!-- 1. Navbar Container (Dynamic) -->
+    <div id="navbar-container"></div>
+
+    <!-- 2. Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-content position-relative z-2">
+            <h5 class="text-uppercase text-white letter-spacing-2 mb-4 animate__animated animate__fadeInDown" style="animation-delay: 1s; opacity: 0.8;">Est. 2024 • Paris, France</h5>
+            <h1 class="hero-title animate__animated animate__fadeInUp" style="animation-delay: 1.2s;">The Art of Scent</h1>
+            <p class="lead text-white opacity-75 mb-5 mx-auto serif-italic animate__animated animate__fadeInUp" style="max-width: 700px; animation-delay: 1.4s;">
+                "Perfume is the key to our memories. It is the unseen, unforgettable, and ultimate accessory of fashion."
+            </p>
+            <div class="animate__animated animate__fadeInUp" style="animation-delay: 1.6s;">
+                <a href="#shop" class="btn-gold me-3" style="color:white; border-color:white;">Explore Collection</a>
+                <a href="#about" class="btn-gold btn-outline-light rounded-30 text-uppercase px-4 py-3 " style="color:white; border-color:white; font: 0.8rem; letter-spacing: 2px;">Our Story</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. About Section -->
+    <section id="about" class="section-padding">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0 reveal">
+                    <div class="position-relative">
+                        <img src="images/ABOUTIMG.jpg" class="img-fluid border border-secondary " alt="About Paarees">
+                    </div>
+                </div>
+                <div class="col-lg-6 ps-lg-5 reveal">
+                    <div class="section-header text-start mb-4">
+                        <p>Our Heritage</p>
+                        <h2>Crafting Timeless Memories</h2>
+                        <div class="divider ms-0"></div>
+                    </div>
+                    <p class="text-muted mb-4" style="line-height: 1.8;">
+                        Paarees Perfumes was born from a singular vision: to curate the world's most exquisite olfactory masterpieces for a discerning clientele. We believe that a fragrance is more than a scent—it is an invisible signature, a lingering memory, and an intimate expression of self.
+                    </p>
+                    <p class="text-muted mb-5" style="line-height: 1.8;">
+                        From the rugged coasts of the Mediterranean inspiring our aquatic notes, to the blooming gardens of Grasse shaping our florals, every bottle in our digital boutique tells a story of craftsmanship, passion, and luxury.
+                    </p>
+                    
+                    <div class="row g-4">
+                        <div class="col-4">
+                            <h3 class="text-gold brand-font display-6">15+</h3>
+                            <small class="text-uppercase text-muted" style="letter-spacing: 1px;">Global Brands</small>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-gold brand-font display-6">10k+</h3>
+                            <small class="text-uppercase text-muted" style="letter-spacing: 1px;">Bottles Sold</small>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-gold brand-font display-6">100%</h3>
+                            <small class="text-uppercase text-muted" style="letter-spacing: 1px;">Authenticity</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Shop Section (Sidebar Sticky Fixed via CSS class 'sticky-sidebar') -->
+    <section id="shop" class="section-padding">
+        <div class="container-fluid px-lg-5">
+            <div class="section-header reveal">
+                <p>The Boutique</p>
+                <h2>Masterpiece Collection</h2>
+                <div class="divider"></div>
+            </div>
+
+            <div class="row">
+                <!-- Sidebar Filters (Desktop) -->
+                <div class="col-lg-3 d-none d-lg-block">
+                    <!-- Added 'sticky-sidebar' class for CSS handling -->
+                    <div class="sticky-sidebar">
+                        <h6 class="text-gold text-uppercase mb-4" style="letter-spacing: 2px;">Filter By Brand</h6>
+                        <div class="d-grid gap-2 mb-5" id="brand-filters">
+                            <!-- JS Injected -->
+                        </div>
+                        
+                        <h6 class="text-gold text-uppercase mb-4" style="letter-spacing: 2px;">Fragrance Family</h6>
+                        <div class="d-grid gap-2" id="cat-filters">
+                            <!-- JS Injected -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Grid -->
+                <div class="col-lg-9">
+                    <!-- Mobile Filter Btn -->
+                    <button class="btn btn-outline-warning w-100 d-lg-none mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#mobileFilters">
+                        Show Filters
+                    </button>
+                    <div class="collapse mb-4" id="mobileFilters">
+                        <div class="card card-body border-secondary">
+                            <h6 class="text-main">Brands</h6>
+                            <div id="mobile-brand-filters" class="d-flex flex-wrap gap-2 mb-3"></div>
+                            <h6 class="text-main">Types</h6>
+                            <div id="mobile-cat-filters" class="d-flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid Container -->
+                    <div id="product-grid">
+                        <!-- Products Injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Gallery Section -->
+    <section id="gallery" class="section-padding">
+        <div class="container">
+            <div class="section-header reveal">
+                <p>Visual Journal</p>
+                <h2>Captured Moments</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4 col-6 reveal">
+                    <div class="gallery-item">
+                        <img src="images/CKMALE1.jpg" alt="CK Perfume">
+                        <div class="gallery-overlay"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6 reveal">
+                    <div class="gallery-item">
+                        <img src="images/DIORFEMALE3.jpg" alt="Dior Perfume">
+                        <div class="gallery-overlay"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6 reveal">
+                    <div class="gallery-item">
+                        <img src="images/GUCCIMALE1.jpg" alt="Gucci Perfume">
+                        <div class="gallery-overlay"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6 reveal">
+                    <div class="gallery-item">
+                        <img src="images/VERSACEMALE1.jpg" alt="Versace Perfume">
+                        <div class="gallery-overlay"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6 reveal">
+                    <div class="gallery-item">
+                        <img src="images/DIORMALE1.jpeg" alt="Dior Men">
+                        <div class="gallery-overlay"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6 reveal">
+                    <div class="gallery-item">
+                        <img src="images/VERSACEMALE5.jpg" alt="Versace Men">
+                        <div class="gallery-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Testimonials Section -->
+    <section class="section-padding bg-black-adaptive">
+        <div class="container reveal">
+            <div class="section-header">
+                <p>Clientèle</p>
+                <h2>Voices of Elegance</h2>
+                <div class="divider"></div>
+            </div>
+            
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="testimonial-card">
+                                    <i class="fas fa-quote-right quote-icon"></i>
+                                    <p class="testimonial-text">"Paarees Perfumes isn't just a store; it's an experience. The authenticity and presentation of the Dior Sauvage I purchased were impeccable."</p>
+                                    <h6 class="text-gold text-uppercase letter-spacing-2">Alexander V.</h6>
+                                    <small class="text-muted">Verified Client</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="testimonial-card">
+                                    <i class="fas fa-quote-right quote-icon"></i>
+                                    <p class="testimonial-text">"Finding genuine niche fragrances online is hard, but Paarees delivers perfection every time. The concierge service is world-class."</p>
+                                    <h6 class="text-gold text-uppercase letter-spacing-2">Isabella R.</h6>
+                                    <small class="text-muted">Paris, France</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Location Section -->
+    <section id="location" class="section-padding">
+        <div class="container reveal">
+            <div class="section-header">
+                <p>Get in Touch</p>
+                <h2>Customer Service</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-5 mb-5 mb-md-0">
+                    <h4 class="text-heading mb-4">Paris Boutique</h4>
+                    <p class="text-muted mb-3"><i class="fas fa-map-marker-alt text-warning me-3"></i> 123 Luxury Lane, Perfume District<br><span class="ms-4">Paris, France 75001</span></p>
+                    <p class="text-muted mb-3"><i class="fas fa-phone text-warning me-3"></i> +33 1 98 76 54 32</p>
+                    <p class="text-muted mb-3"><i class="fas fa-envelope text-warning me-3"></i> info@paareesperfumes.com</p>
+                    
+                    <div class="mt-5 p-4 border border-secondary bg-card">
+                        <h5 class="text-heading mb-3 small text-uppercase letter-spacing-2">Trade & Wholesale</h5>
+                        <p class="small text-muted mb-3">Retail partners can access our catalog below.</p>
+                        <!-- <button onclick="downloadPriceList()" class="btn btn-outline-secondary btn-sm rounded-0 w-100 text-uppercase">
+                            <i class="fas fa-download me-2"></i> Download Price List
+                        </button> -->
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <h4 class="text-heading mb-4">Send an Inquiry</h4>
+                    <form id="contact-form" novalidate>
+                        <div class="mb-4">
+                            <input type="text" id="contact-name" class="form-control bg-card text-main border-secondary rounded-0 p-3" placeholder="YOUR NAME">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" id="contact-email" class="form-control bg-card text-main border-secondary rounded-0 p-3" placeholder="EMAIL ADDRESS">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="mb-4">
+                            <textarea id="contact-message" class="form-control bg-card text-main border-secondary rounded-0 p-3" rows="4" placeholder="HOW MAY WE ASSIST YOU?"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <button type="submit" class="btn-gold w-100">Contact Us</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Footer Container (Dynamic) -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="custom-toast rounded">
+        <div class="d-flex align-items-center">
+            <i id="toast-icon" class="fas fa-check-circle text-warning me-3 fa-lg"></i>
+            <div>
+                <strong id="toast-title" class="d-block text-uppercase letter-spacing-1">Success</strong>
+                <span class="small opacity-75" id="toast-msg">Request processed.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title brand-font" id="cartOffcanvasLabel">Your Selection</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <!-- Cart Items -->
+            <div id="cart-items-container" class="flex-grow-1 overflow-auto mb-3">
+                <div class="text-center text-muted mt-5">
+                    <i class="fas fa-shopping-bag fa-3x mb-3 opacity-25"></i>
+                    <p>Your cart is empty.</p>
+                </div>
+            </div>
+            
+            <!-- Cart Footer -->
+            <div class="border-top pt-3">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-uppercase letter-spacing-1">Subtotal</span>
+                    <strong id="cart-total">$0.00</strong>
+                </div>
+                <button class="btn-gold w-100 mb-2" onclick="checkout()">Proceed to Checkout</button>
+                <button class="btn btn-outline-secondary w-100 rounded-30 text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;" data-bs-dismiss="offcanvas">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

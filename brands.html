@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Boutique | PAAREES</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body id="top">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="brand-font loader-logo">PAAREES</div>
+            <div class="loader-line"></div>
+            <p class="text-uppercase small text-muted letter-spacing-2">Loading Products...</p>
+        </div>
+    </div>
+
+    <!-- 1. Navbar Container (Dynamic) -->
+    <div id="navbar-container"></div>
+
+    <!-- Page Header -->
+    <header class="page-header-section mt-5">
+        <div class="container text-center pt-5">
+            <h1 class="display-4 brand-font text-gold animate__animated animate__fadeInUp">The Shop</h1>
+            <p class="lead text-muted animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">Discover Our Exclusive Collection</p>
+        </div>
+    </header>
+
+    <!-- 4. Shop Section -->
+    <section id="shop" class="section-padding">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <!-- Sidebar Filters (Desktop) -->
+                <div class="col-lg-3 d-none d-lg-block">
+                    <!-- Added 'sticky-sidebar' class for CSS handling -->
+                    <div class="sticky-sidebar">
+                        <h6 class="text-gold text-uppercase mb-4" style="letter-spacing: 2px;">Filter By Brand</h6>
+                        <div class="d-grid gap-2 mb-5" id="brand-filters">
+                            <!-- JS Injected -->
+                        </div>
+                        
+                        <h6 class="text-gold text-uppercase mb-4" style="letter-spacing: 2px;">Fragrance Family</h6>
+                        <div class="d-grid gap-2" id="cat-filters">
+                            <!-- JS Injected -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Grid -->
+                <div class="col-lg-9">
+                    <!-- Mobile Filter Btn -->
+                    <button class="btn btn-outline-warning w-100 d-lg-none mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#mobileFilters">
+                        Show Filters
+                    </button>
+                    <div class="collapse mb-4" id="mobileFilters">
+                        <div class="card card-body border-secondary">
+                            <h6 class="text-main">Brands</h6>
+                            <div id="mobile-brand-filters" class="d-flex flex-wrap gap-2 mb-3"></div>
+                            <h6 class="text-main">Types</h6>
+                            <div id="mobile-cat-filters" class="d-flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid Container -->
+                    <div id="product-grid">
+                        <!-- Products Injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Footer Container (Dynamic) -->
+    <div id="footer-container"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="custom-toast rounded">
+        <div class="d-flex align-items-center">
+            <i id="toast-icon" class="fas fa-check-circle text-warning me-3 fa-lg"></i>
+            <div>
+                <strong id="toast-title" class="d-block text-uppercase letter-spacing-1">Success</strong>
+                <span class="small opacity-75" id="toast-msg">Request processed.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title brand-font" id="cartOffcanvasLabel">Your Selection</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <div id="cart-items-container" class="flex-grow-1 overflow-auto mb-3">
+                <div class="text-center text-muted mt-5">
+                    <i class="fas fa-shopping-bag fa-3x mb-3 opacity-25"></i>
+                    <p>Your cart is empty.</p>
+                </div>
+            </div>
+            <div class="border-top pt-3">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-uppercase letter-spacing-1">Subtotal</span>
+                    <strong id="cart-total">$0.00</strong>
+                </div>
+                <button class="btn-gold w-100 mb-2" onclick="checkout()">Proceed to Checkout</button>
+                <button class="btn btn-outline-secondary w-100 rounded-30 text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;" data-bs-dismiss="offcanvas">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

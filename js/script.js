@@ -93,15 +93,36 @@ function renderNavbar() {
         @media (min-width: 992px) {
             .dropdown:hover .dropdown-menu { display: block; margin-top: 0; }
         }
+        /* Black Hamburger Fix */
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 0, 0, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+        [data-bs-theme="dark"] .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(212, 175, 55, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
     </style>
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="index.html">
                 <img src="images/LOGO.png" alt="Paarees Logo" style="height: 50px; width: auto;">
             </a>
-            <button class="navbar-toggler border-0 ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon" style="filter: invert(0.5);"></span>
-            </button>
+
+            <!-- Icons container: Stays outside hamburger on mobile -->
+            <div class="d-flex align-items-center order-lg-last ms-auto">
+                <button class="nav-icon-btn px-2" type="button" onclick="toggleTheme()" id="theme-toggle-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-icon-btn px-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </button>
+                
+                <!-- Toggler Button -->
+                <button class="navbar-toggler border-0 ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
             <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item"><a class="nav-link ${isActive('index.html')}" href="index.html">Home</a></li>
@@ -122,17 +143,39 @@ function renderNavbar() {
                     <li class="nav-item ms-lg-3 d-none d-lg-block">
                         <a href="brands.html" class="btn-gold">Shop Now</a>
                     </li>
-                    <li class="nav-item">
-                        <button class="nav-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
-                            <i class="fas fa-shopping-bag"></i>
-                            <span class="cart-badge" id="cart-count">0</span>
-                        </button>
-                    </li>
                 </ul>
             </div>
         </div>
     </nav>
     `;
+    updateThemeIcon();
+}
+
+/* ==========================================================================
+   THEME MANAGEMENT (Dark/Light Mode)
+   ========================================================================== */
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-bs-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    html.setAttribute('data-bs-theme', newTheme);
+    localStorage.setItem('paarees-theme', newTheme);
+    updateThemeIcon();
+}
+
+function applyTheme() {
+    const savedTheme = localStorage.getItem('paarees-theme') || 'light';
+    document.documentElement.setAttribute('data-bs-theme', savedTheme);
+}
+
+function updateThemeIcon() {
+    const btn = document.getElementById('theme-toggle-btn');
+    if (!btn) return;
+    
+    const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+    btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
 }
 
 // Renders the Footer (Neeche wala hissa)
@@ -144,7 +187,7 @@ function renderFooter() {
     <footer>
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-5 mb-lg-0">
+                <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
                     <h5 class="brand-font display-6 mb-4">PAAREES</h5>
                     <p class="small text-muted mb-4">The ultimate destination for luxury fragrances. iconic perfume houses.</p>
                     <div>
@@ -153,36 +196,128 @@ function renderFooter() {
                         <a href="#" class="social-link"><i class="fab fa-pinterest-p"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <h5 class="text-uppercase">Collections</h5>
-                    <ul>
-                        <li><a href="#">New Arrivals</a></li>
-                        <li><a href="#">Best Sellers</a></li>
-                        <li><a href="#">Men's Cologne</a></li>
-                        <li><a href="#">Women's Parfum</a></li>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="text-uppercase small mb-4" style="letter-spacing: 2px;">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-muted small text-decoration-none d-block mb-2">Home</a></li>
+                        <li><a href="about.html" class="text-muted small text-decoration-none d-block mb-2">About Us</a></li>
+                        <li><a href="gallery.html" class="text-muted small text-decoration-none d-block mb-2">Gallery</a></li>
+                        <li><a href="contact.html" class="text-muted small text-decoration-none d-block mb-2">Location</a></li>
+                        <li><a href="#" onclick="downloadPriceList()" class="text-gold small text-decoration-none d-block mt-3"><i class="fas fa-file-download me-2"></i>Price List</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-2 col-md-4 mb-4">
-                    <h5 class="text-uppercase">Legal</h5>
-                    <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="text-uppercase small mb-4" style="letter-spacing: 2px;">Brands</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="brands.html?brand=Versace" class="text-muted small text-decoration-none d-block mb-2">Versace</a></li>
+                        <li><a href="brands.html?brand=Gucci" class="text-muted small text-decoration-none d-block mb-2">Gucci</a></li>
+                        <li><a href="brands.html?brand=Dior" class="text-muted small text-decoration-none d-block mb-2">Dior</a></li>
+                        <li><a href="brands.html?brand=CK" class="text-muted small text-decoration-none d-block mb-2">Calvin Klein</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-4 col-md-4">
-                    <h5 class="text-uppercase">Newsletter</h5>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="text-uppercase small mb-4" style="letter-spacing: 2px;">Legal</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="privacy.html" class="text-muted small text-decoration-none d-block mb-2">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="text-muted small text-decoration-none d-block mb-2">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-uppercase small mb-4" style="letter-spacing: 2px;">Newsletter</h5>
                     <div class="input-group">
-                        <input type="email" class="form-control bg-card border-secondary text-main rounded-0" placeholder="EMAIL ADDRESS">
-                        <button class="btn btn-gold border-0">JOIN</button>
+                        <input type="email" id="newsletter-email" class="form-control bg-card border-secondary text-main rounded-0" placeholder="EMAIL ADDRESS">
+                        <button class="btn btn-gold border-0" onclick="joinNewsletter()">JOIN</button>
                     </div>
                 </div>
             </div>
             <div class="border-top border-secondary pt-4 mt-5 text-center">
-                <p class="small text-muted">&copy; 2024 Paarees Perfumes. All Rights Reserved.</p>
+                <p class="small text-muted">&copy; 2026 Paarees Perfumes. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
     `;
+}
+
+// Newsletter join with mailto (Newsletter join function)
+function joinNewsletter() {
+    const emailInput = document.getElementById('newsletter-email');
+    const email = emailInput.value.trim();
+    
+    // Strict Email regex validation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if (email === "") {
+        showToast("Please enter your email address.", "error");
+        emailInput.focus();
+    } else if (!emailRegex.test(email)) {
+        showToast("Invalid email format. Please use example@mail.com", "error");
+        emailInput.focus();
+    } else {
+        window.location.href = `mailto:info@paareesperfumes.com?subject=Newsletter Join Request&body=I would like to join the newsletter. My email is: ${email}`;
+        showToast("Opening mail client...");
+        emailInput.value = ""; 
+    }
+}
+
+// Contact Form Validation (Contact form check karne ka tareeqa)
+function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('contact-name');
+        const email = document.getElementById('contact-email');
+        const message = document.getElementById('contact-message');
+        let isValid = true;
+
+        // Reset previous errors
+        [name, email, message].forEach(el => {
+            el.classList.remove('is-invalid');
+            if (el.nextElementSibling) el.nextElementSibling.innerText = "";
+        });
+
+        // Name validation: ONLY characters and spaces allowed
+        const nameRegex = /^[a-zA-Z\s]{3,30}$/;
+        if (!nameRegex.test(name.value.trim())) {
+            showError(name, "Name must be 3-30 characters and contain only letters.");
+            isValid = false;
+        }
+
+        // Email validation: Strict Regex
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email.value.trim())) {
+            showError(email, "Please enter a valid email address.");
+            isValid = false;
+        }
+
+        // Message validation
+        if (message.value.trim().length < 10) {
+            showError(message, "Message must be at least 10 characters.");
+            isValid = false;
+        }
+
+        if (isValid) {
+            const mailtoLink = `mailto:info@paareesperfumes.com?subject=Contact Inquiry from ${name.value.trim()}&body=Name: ${name.value.trim()}%0D%0AEmail: ${email.value.trim()}%0D%0AMessage: ${message.value.trim()}`;
+            window.location.href = mailtoLink;
+            showToast("Opening mail client...");
+            form.reset();
+        } else {
+            showToast("Please fix the errors in the form.", "error");
+        }
+    });
+}
+
+function showError(input, message) {
+    input.classList.add('is-invalid');
+    if (input.nextElementSibling) {
+        input.nextElementSibling.innerText = message;
+        input.nextElementSibling.style.display = 'block';
+        input.nextElementSibling.style.color = '#dc3545';
+        input.nextElementSibling.style.fontSize = '0.8rem';
+        input.nextElementSibling.style.marginTop = '5px';
+    }
 }
 
 // Renders Filter Buttons (Side bar ke buttons)
@@ -281,27 +416,56 @@ function renderFullGallery() {
     const container = document.getElementById('full-gallery-container');
     if (!container) return;
 
-    container.innerHTML = ''; 
-    brands.forEach(brand => {
-        const brandProducts = products.filter(p => p.brand === brand);
-        if (brandProducts.length === 0) return;
+    if (products.length < 4) {
+        container.innerHTML = `<div class="row g-3">${products.map((p, i) => renderGalleryItem(p, i, true)).join('')}</div>`;
+        return;
+    }
 
-        const header = document.createElement('div');
-        header.className = 'gallery-brand-header animate__animated animate__fadeInUp';
-        header.innerHTML = `<h3 class="brand-font text-heading">${brand}</h3>`;
-        container.appendChild(header);
+    // Separate last 3 products to ensure they end in a straight line
+    const mainProducts = products.slice(0, -3);
+    const last3 = products.slice(-3);
 
-        const row = document.createElement('div');
-        row.className = 'row g-3 mb-5';
-        brandProducts.forEach((p, index) => {
-            const col = document.createElement('div');
-            col.className = 'col-6 col-md-4 col-lg-3 animate__animated animate__fadeInUp';
-            col.style.animationDelay = `${0.1 * (index % 4)}s`;
-            col.innerHTML = `<div class="full-gallery-item"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>`;
-            row.appendChild(col);
-        });
-        container.appendChild(row);
-    });
+    // Distribute main products into 3 columns for staggered look
+    const col1 = mainProducts.filter((_, i) => i % 3 === 0);
+    const col2 = mainProducts.filter((_, i) => i % 3 === 1);
+    const col3 = mainProducts.filter((_, i) => i % 3 === 2);
+
+    container.innerHTML = `
+        <div class="lux-gallery mb-3">
+            <div class="lux-gallery-column">
+                ${col1.map((p, i) => renderGalleryItem(p, i)).join('')}
+            </div>
+            <div class="lux-gallery-column">
+                ${col2.map((p, i) => renderGalleryItem(p, i)).join('')}
+            </div>
+            <div class="lux-gallery-column">
+                ${col3.map((p, i) => renderGalleryItem(p, i)).join('')}
+            </div>
+        </div>
+        
+        <!-- Final Row: Perfectly Aligned -->
+        <div class="row g-3">
+            ${last3.map((p, i) => `
+                <div class="col-md-4">
+                    ${renderGalleryItem(p, i, true)}
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+// Helper function to render a single gallery item
+function renderGalleryItem(p, index, forceSquare = false) {
+    const style = forceSquare ? 'aspect-ratio: 1/1; object-fit: cover;' : '';
+    return `
+        <div class="lux-gallery-item animate__animated animate__fadeInUp" style="animation-delay: ${0.05 * (index % 10)}s;">
+            <img src="${p.image}" alt="${p.name}" loading="lazy" style="width:100%; ${style}">
+            <div class="item-info">
+                <small class="text-uppercase text-gold" style="letter-spacing: 2px;">${p.brand}</small>
+                <h6 class="brand-font mb-0">${p.name}</h6>
+            </div>
+        </div>
+    `;
 }
 
 /* ==========================================================================
@@ -453,6 +617,57 @@ function checkout() {
    6. UTILITIES (Choti madadgaar cheezein)
    ========================================================================== */
 
+// Download Full Price List as Word Document
+function downloadPriceList() {
+    showToast("Generating Price List...");
+    
+    let content = `
+        <div style="font-family: 'Times New Roman', serif; padding: 40px;">
+            <h1 style="color: #D4AF37; text-align: center; border-bottom: 2px solid #D4AF37; padding-bottom: 10px;">PAAREES PERFUMES</h1>
+            <h2 style="text-align: center; color: #333;">Official Price List - 2026</h2>
+            <br>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Brand</th>
+                        <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Product Name</th>
+                        <th style="border: 1px solid #ddd; padding: 12px; text-align: left;">Collection</th>
+                        <th style="border: 1px solid #ddd; padding: 12px; text-align: right;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    products.forEach(p => {
+        content += `
+            <tr>
+                <td style="border: 1px solid #ddd; padding: 10px;">${p.brand}</td>
+                <td style="border: 1px solid #ddd; padding: 10px;">${p.name}</td>
+                <td style="border: 1px solid #ddd; padding: 10px;">${p.category}</td>
+                <td style="border: 1px solid #ddd; padding: 10px; text-align: right; font-weight: bold;">${p.price}</td>
+            </tr>
+        `;
+    });
+
+    content += `
+                </tbody>
+            </table>
+            <br>
+            <p style="text-align: center; color: #666; font-style: italic;">All perfumes are 100% authentic imported originals.</p>
+            <p style="text-align: center; font-size: 10pt;">&copy; 2026 Paarees Perfumes Paris - Karachi</p>
+        </div>
+    `;
+
+    const header = "<html><head><meta charset='utf-8'></head><body>";
+    const footer = "</body></html>";
+    const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(header + content + footer);
+    
+    const fileDownload = document.createElement("a");
+    fileDownload.href = source;
+    fileDownload.download = `Paarees_Perfumes_Price_List.doc`;
+    fileDownload.click();
+}
+
 // Download Product Details as Word Document
 // Saman ki maloomat Word file mein download karein
 function downloadDetails(id) {
@@ -486,9 +701,23 @@ function downloadDetails(id) {
 function showToast(msg, type = 'success') {
     const t = document.getElementById('toast');
     const msgEl = document.getElementById('toast-msg');
+    const iconEl = document.getElementById('toast-icon');
+    const titleEl = document.getElementById('toast-title');
+    
     if(!t || !msgEl) return;
     
     msgEl.innerText = msg;
+    
+    if (type === 'error') {
+        t.style.borderLeftColor = '#dc3545';
+        if (iconEl) { iconEl.className = 'fas fa-exclamation-circle text-danger me-3 fa-lg'; }
+        if (titleEl) { titleEl.innerText = 'Error'; }
+    } else {
+        t.style.borderLeftColor = 'var(--gold)';
+        if (iconEl) { iconEl.className = 'fas fa-check-circle text-warning me-3 fa-lg'; }
+        if (titleEl) { titleEl.innerText = 'Success'; }
+    }
+    
     t.style.display = 'block';
     setTimeout(() => { t.style.display = 'none'; }, 3000);
 }
@@ -515,20 +744,26 @@ const observer = new IntersectionObserver((entries) => {
 
 // When the page loads (Jab page khul jaye)
 document.addEventListener('DOMContentLoaded', () => {
-    renderNavbar();
-    renderFooter();
-    renderFilters();
-    renderProducts();
-    renderFullGallery();
-    
-    // Start animation tracking
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // Handle Preloader logic
-    const path = window.location.pathname;
-    if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
-        setTimeout(hidePreloader, 1500);
-    } else {
-        hidePreloader();
+    applyTheme();
+    try {
+        renderNavbar();
+        renderFooter();
+        renderFilters();
+        renderProducts();
+        renderFullGallery();
+        initContactForm();
+        
+        // Start animation tracking
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    } catch (error) {
+        console.error("Initialization error:", error);
+    } finally {
+        // Handle Preloader logic - ALWAYS hide even if error
+        const path = window.location.pathname;
+        if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
+            setTimeout(hidePreloader, 1000);
+        } else {
+            hidePreloader();
+        }
     }
 });

@@ -40,6 +40,8 @@
 }
 
 /* --- 2. General Body Setup --- */
+.rounded-30 { border-radius: 30px !important; }
+
 body {
     font-family: 'Lato', sans-serif;
     background-color: var(--bg-body);
@@ -275,17 +277,35 @@ h1, h2, h3, h4, h5, .brand-font {
     background: var(--gold);
     color: #fff;
     border: 1px solid var(--gold);
-    width: 50%;
-    padding: 8px 0;
-    font-size: 0.7rem; 
-    text-transform: uppercase; 
-    letter-spacing: 2px;
-    margin-top: 5px;
+    padding: 10px 10px;
+    font-size: 0.9rem; 
     transition: 0.3s;
     cursor: pointer;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .btn-add-cart:hover {
     background: #fff;
+    color: var(--gold);
+}
+
+/* Professional Card Quantity Selector */
+.product-card .btn-group {
+    border-radius: 50px !important;
+    background: rgba(0,0,0,0.03);
+}
+[data-bs-theme="dark"] .product-card .btn-group {
+    background: rgba(255,255,255,0.05);
+}
+
+.product-card .btn-group .btn {
+    font-size: 0.9rem;
+    padding: 2px 12px;
+    color: var(--text-main);
+}
+.product-card .btn-group .btn:hover {
     color: var(--gold);
 }
 
@@ -462,11 +482,23 @@ h1, h2, h3, h4, h5, .brand-font {
     letter-spacing: 1px; z-index: 2;
 }
 
+.discount-badge {
+    position: absolute; top: 15px; right: 15px;
+    background: #ff4757; color: #fff;
+    font-size: 0.65rem; font-weight: 800;
+    text-transform: uppercase; padding: 4px 10px;
+    letter-spacing: 1px; z-index: 2;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+}
+
 .card-info { padding: 20px; text-align: center; }
 .card-brand { color: var(--gold); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 5px; }
 .card-title { font-family: 'Cinzel', serif; font-size: 1.1rem; margin: 5px 0; color: var(--text-heading); font-weight: 600;}
 .card-price { font-weight: 400; color: var(--text-main); font-family: 'Lato', sans-serif; margin-bottom: 10px; }
 .card-rating { color: var(--gold); font-size: 0.7rem; margin: 5px 0; }
+
+.rounded-30 { border-radius: 30px !important; }
 
 .btn-card {
     font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
@@ -474,6 +506,7 @@ h1, h2, h3, h4, h5, .brand-font {
     padding: 8px 0; width: 100%; margin-top: 10px;
     transition: 0.3s;
     cursor: pointer;
+    border-radius: 30px;
 }
 .btn-card:hover { border-color: var(--gold); color: var(--gold); }
 

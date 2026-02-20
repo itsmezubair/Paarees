@@ -42,10 +42,26 @@ productImages.forEach(filename => {
     if (filename.includes('FEMALE')) category = 'Female';
     else if (filename.includes('MALE')) category = 'Male';
     
-    // Random Price and Rating (Farzi qeemat aur rating)
-    let randomPrice = Math.floor(Math.random() * 200) + 80;
-    let randomRating = (Math.random() * (5 - 4) + 4).toFixed(1);
+    // Generate a hash from filename for truly random-looking but stable numbers
+    let hash = 0;
+    for (let i = 0; i < filename.length; i++) {
+        hash = ((hash << 5) - hash) + filename.charCodeAt(i);
+        hash |= 0; // Convert to 32bit integer
+    }
+    const absHash = Math.abs(hash);
+
+    // Truly random-looking Price between $149 and $299
+    let randomPriceBase = 149 + (absHash % 151); 
     
+    // Truly random-looking Rating between 4.1 and 5.0
+    let randomRating = (4.1 + (absHash % 10) / 10).toFixed(1);
+    
+    // Stable Discount (15% or 20%)
+    const discountPercent = (absHash % 2 === 0) ? 15 : 20;
+    
+    // Clean, rounded original price calculation
+    const originalPriceBase = Math.ceil(randomPriceBase / (1 - (discountPercent / 100)));
+
     // Add to products array
     products.push({
         id: idCounter++,
@@ -53,9 +69,20 @@ productImages.forEach(filename => {
         name: `${brand} ${category} Edition`,
         subName: 'Eau De Parfum',
         category: category,
-        price: `$${randomPrice}.00`,
+        price: `$${randomPriceBase}.00`,
+        oldPrice: `$${originalPriceBase}.00`,
+        discount: `${discountPercent}% OFF`,
         image: `images/${filename}`,
-        rating: randomRating
+        rating: randomRating,
+        description: `Experience the pinnacle of olfactory craftsmanship with the ${brand} ${category} Edition. This exquisite Eau De Parfum is a celebration of sophistication and timeless elegance. Formulated with the rarest ingredients sourced from across the globe, it opens with vibrant top notes that transition into a complex heart, finally settling into a deep, long-lasting base that stays with you throughout the day. Perfect for the discerning individual who demands nothing but the best, this fragrance is a statement of luxury.`,
+        fullDescription: `Experience the pinnacle of olfactory craftsmanship with the ${brand} ${category} Edition. This exquisite Eau De Parfum is a celebration of sophistication and timeless elegance. Formulated with the rarest ingredients sourced from across the globe, it opens with vibrant top notes that transition into a complex heart, finally settling into a deep, long-lasting base that stays with you throughout the day.\n\nThe fragrance journey begins with a burst of citrus and precious spices, creating an immediate aura of luxury. As the scent develops, it reveals a heart of rare florals and exotic resins, blended to perfection by master perfumers. The base notes are anchored by rich woods, creamy vanilla, and amber, providing an intoxicating sillage that is both powerful and refined.\n\nDesigned for the modern connoisseur, this fragrance transcends trends, offering a classic yet contemporary appeal. Every spray is a testament to our heritage of quality and the pursuit of aromatic perfection. Whether for a formal evening or daily wear, it commands attention and leaves a lasting impression of grace and power. The bottle itself is a work of art, reflecting the premium nature of the liquid within.\n\nOur commitment to excellence ensures that every bottle meets the highest standards of luxury. We source only the finest sustainable ingredients to create a scent that is as ethical as it is beautiful. Join the elite circle of individuals who choose Paarees for their signature scent, and discover why this edition is hailed as a masterpiece of modern perfumery. It is not just a perfume; it is an invisible crown of elegance.`,
+        specs: {
+            volume: "100ml / 3.4 fl.oz",
+            type: "Eau De Parfum (EDP)",
+            origin: "Paris, France",
+            longevity: "8-10 Hours",
+            sillage: "Moderate to Strong"
+        }
     });
 });
 
@@ -63,9 +90,14 @@ productImages.forEach(filename => {
    2. GLOBAL STATE (App ki halat)
    ========================================================================== */
 
-let cart = []; // Shopping cart items
+let cart = JSON.parse(localStorage.getItem('paarees-cart')) || []; // Shopping cart items with persistence
 let currentBrand = 'all'; // Currently selected brand filter
 let currentCat = 'all';   // Currently selected category filter
+let currentProductQty = 1; // Temporary qty for product detail page
+
+function saveCart() {
+    localStorage.setItem('paarees-cart', JSON.stringify(cart));
+}
 
 // Detect brand from URL (e.g., brands.html?brand=Dior)
 try {
@@ -230,8 +262,9 @@ function renderFooter() {
                     </div>
                 </div>
             </div>
-            <div class="border-top border-secondary pt-4 mt-5 text-center">
-                <p class="small text-muted">&copy; 2026 Paarees Perfumes. All Rights Reserved.</p>
+            <div class="border-top border-secondary pt-3 mt-4 text-center">
+                <p class="small text-muted mb-0" style="text-transform: none;">&copy; 2026 Paarees Perfumes. All Rights Reserved.</p>
+                <p class="small text-muted mb-0" style="text-transform: none;">Designed by <a href="http://www.muhammadzubairmughal.xyz" target="_blank" class="text-decoration-none text-muted fw-bold" style="transition: 0.3s; text-transform: none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Muhammad Zubair Mughal</a></p>
             </div>
         </div>
     </footer>
@@ -458,13 +491,13 @@ function renderFullGallery() {
 function renderGalleryItem(p, index, forceSquare = false) {
     const style = forceSquare ? 'aspect-ratio: 1/1; object-fit: cover;' : '';
     return `
-        <div class="lux-gallery-item animate__animated animate__fadeInUp" style="animation-delay: ${0.05 * (index % 10)}s;">
+        <a href="product-details.html?id=${p.id}" class="lux-gallery-item animate__animated animate__fadeInUp d-block text-decoration-none" style="animation-delay: ${0.05 * (index % 10)}s;">
             <img src="${p.image}" alt="${p.name}" loading="lazy" style="width:100%; ${style}">
             <div class="item-info">
                 <small class="text-uppercase text-gold" style="letter-spacing: 2px;">${p.brand}</small>
-                <h6 class="brand-font mb-0">${p.name}</h6>
+                <h6 class="brand-font mb-0 text-white">${p.name}</h6>
             </div>
-        </div>
+        </a>
     `;
 }
 
@@ -486,6 +519,7 @@ function createProductCard(p) {
     div.innerHTML = `
         <div class="product-card">
             <span class="card-badge">${p.brand}</span>
+            <span class="discount-badge">${p.discount}</span>
             <div class="card-img-wrapper">
                 <img src="${p.image}" alt="${p.name}" loading="lazy">
             </div>
@@ -493,10 +527,13 @@ function createProductCard(p) {
                 <span class="card-brand">${p.category} Collection</span>
                 <h5 class="card-title">${p.name}</h5>
                 <div class="card-rating">${getStars(p.rating)} <span class="text-muted ms-1">(${p.rating})</span></div>
-                <div class="card-price mb-2">${p.price}</div>
-                <div class="d-flex gap-2">
-                    <button onclick="downloadDetails(${p.id})" class="btn-card flex-grow-1">View Specs</button>
-                    <button onclick="addToCart(${p.id})" class="btn-add-cart flex-grow-1" style="margin-top: 10px;">
+                <div class="card-price mb-2">
+                    <span class="text-gold fw-bold">${p.price}</span>
+                    <small class="text-muted text-decoration-line-through ms-2" style="font-size: 0.8rem;">${p.oldPrice}</small>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <a href="product-details.html?id=${p.id}" class="btn-card flex-grow-1 text-center text-decoration-none rounded-30 py-2 m-0" style="line-height: 1.5;">View Product</a>
+                    <button onclick="addToCart(${p.id})" class="btn-add-cart rounded-30 px-3 py-2 m-0" style="min-width: 50px;">
                         <i class="fas fa-shopping-cart"></i>
                     </button>
                 </div>
@@ -504,6 +541,130 @@ function createProductCard(p) {
         </div>
     `;
     return div;
+}
+
+// Renders the Product Detail Page (Product ki mukammal maloomat)
+function renderProductDetail() {
+    const container = document.getElementById('product-detail-container');
+    if (!container) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = parseInt(urlParams.get('id'));
+    const p = products.find(prod => prod.id === id);
+
+    if (!p) {
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <h3 class="brand-font">Product not found</h3>
+                <p class="text-muted mb-4">The fragrance you are looking for might have been moved or removed.</p>
+                <a href="brands.html" class="btn-gold">Back to Collection</a>
+            </div>
+        `;
+        return;
+    }
+
+    // Set page title
+    document.title = `${p.name} | PAAREES`;
+    currentProductQty = 1; // Reset qty
+
+    container.innerHTML = `
+        <div class="row g-5 align-items-start">
+            <div class="col-lg-5 animate__animated animate__fadeInLeft">
+                <div class="product-detail-img-wrapper border border-secondary p-4 bg-card shadow-sm text-center">
+                    <img src="${p.image}" alt="${p.name}" class="img-fluid" style="max-height: 500px; width: auto;">
+                </div>
+            </div>
+            <div class="col-lg-7 animate__animated animate__fadeInRight">
+                <div class="product-info-content">
+                    <p class="text-gold text-uppercase letter-spacing-2 mb-2">${p.brand} • ${p.category} Edition</p>
+                    <h1 class="brand-font display-5 mb-3 text-heading">${p.name}</h1>
+                    
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="text-gold me-3">${getStars(p.rating)}</div>
+                        <span class="text-muted small border-start border-secondary ps-3">${p.rating} / 5.0 Rating</span>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-4">
+                        <h2 class="text-gold mb-0 brand-font display-6 me-3">${p.price}</h2>
+                        <span class="text-muted text-decoration-line-through fs-5 me-3">${p.oldPrice}</span>
+                        <span class="badge bg-danger rounded-pill px-3 py-2">${p.discount}</span>
+                    </div>
+                    
+                    <div class="description-box mb-5">
+                        <h6 class="text-uppercase letter-spacing-2 mb-3 text-heading">Description</h6>
+                        <p class="text-muted" style="line-height: 1.8; font-size: 1.05rem;">${p.description}</p>
+                    </div>
+
+                    <div class="purchase-actions mb-5">
+                        <div class="row g-3 align-items-center mb-4">
+                            <div class="col-auto">
+                                <label class="small text-uppercase letter-spacing-1 d-block mb-2">Quantity</label>
+                                <div class="btn-group border border-secondary">
+                                    <button class="btn btn-outline-secondary border-0 px-3" onclick="updateDetailQty(-1)">-</button>
+                                    <button class="btn btn-outline-secondary border-0 px-4 disabled text-main fw-bold" id="detail-qty">1</button>
+                                    <button class="btn btn-outline-secondary border-0 px-3" onclick="updateDetailQty(1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <button onclick="addToCart(${p.id}, parseInt(document.getElementById('detail-qty').innerText))" class="btn-gold px-3 py-2 small text-uppercase" style="letter-spacing: 1px; font-size: 0.85rem;">
+                                <i class="fas fa-shopping-cart me-2"></i> ADD TO CART
+                            </button>
+                            <button onclick="buyNow(${p.id})" class="btn btn-dark rounded-30 px-3 py-2 small text-uppercase" style="letter-spacing: 1px; font-size: 0.85rem;">
+                                <i class="fas fa-bolt me-2"></i> BUY NOW
+                            </button>
+                            <button onclick="downloadDetails(${p.id})" class="btn btn-outline-secondary rounded-30 px-3 py-2 small text-uppercase" style="letter-spacing: 1px; font-size: 0.85rem;">
+                                <i class="fas fa-file-download me-2"></i> SPECS
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Trust Badges -->
+                    <div class="row g-4 border-top border-secondary pt-5 mt-4">
+                        <div class="col-sm-4 text-center">
+                            <i class="fas fa-undo-alt text-gold mb-2 fa-2x"></i>
+                            <p class="small text-uppercase letter-spacing-1 mb-0" style="font-size: 0.75rem;">100% Money Back</p>
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <i class="fas fa-lock text-gold mb-2 fa-2x"></i>
+                            <p class="small text-uppercase letter-spacing-1 mb-0" style="font-size: 0.75rem;">Secure Payment</p>
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <i class="fas fa-award text-gold mb-2 fa-2x"></i>
+                            <p class="small text-uppercase letter-spacing-1 mb-0" style="font-size: 0.75rem;">Authentic Brand</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function updateDetailQty(change) {
+    const qtyEl = document.getElementById('detail-qty');
+    if (!qtyEl) return;
+    let current = parseInt(qtyEl.innerText);
+    current += change;
+    if (current < 1) current = 1;
+    qtyEl.innerText = current;
+}
+
+function buyNow(id, qty = null) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+
+    if (qty === null) {
+        const qtyEl = document.getElementById('detail-qty');
+        qty = qtyEl ? parseInt(qtyEl.innerText) : 1;
+    }
+    
+    // Store only this item for checkout, don't add to permanent cart
+    const buyNowItem = { ...product, qty: qty };
+    localStorage.setItem('paarees-buy-now', JSON.stringify(buyNowItem));
+    
+    showToast("Opening Secure Checkout...");
+    window.location.href = 'checkout.html';
 }
 
 // Toggle "Show More" items (Ziyada items dikhane ya chupane ke liye)
@@ -534,18 +695,19 @@ function getStars(rating) {
    ========================================================================== */
 
 // Add item to cart (Saman cart mein dalein)
-function addToCart(id) {
+function addToCart(id, qty = 1) {
     const product = products.find(p => p.id === id);
     if (!product) return;
 
     const existingItem = cart.find(item => item.id === id);
     if (existingItem) {
-        existingItem.qty++;
-        showToast(`Increased quantity of ${product.name}`);
+        existingItem.qty += qty;
+        showToast(`Updated ${product.name} quantity in cart`);
     } else {
-        cart.push({ ...product, qty: 1 });
+        cart.push({ ...product, qty: qty });
         showToast(`Added ${product.name} to cart`);
     }
+    saveCart();
     updateCartUI();
 }
 
@@ -555,6 +717,7 @@ function changeQty(id, change) {
     if (itemIndex > -1) {
         cart[itemIndex].qty += change;
         if (cart[itemIndex].qty <= 0) cart.splice(itemIndex, 1);
+        saveCart();
         updateCartUI();
     }
 }
@@ -570,7 +733,7 @@ function updateCartUI() {
     if (!container || !totalEl) return;
 
     if (cart.length === 0) {
-        container.innerHTML = `<div class="text-center text-muted mt-5"><p>Your cart is empty.</p></div>`;
+        container.innerHTML = `<div class="text-center text-muted mt-5"><i class="fas fa-shopping-bag fa-3x mb-3 opacity-25"></i><p>Your cart is empty.</p></div>`;
         totalEl.innerText = '$0.00';
         return;
     }
@@ -585,14 +748,19 @@ function updateCartUI() {
             <li class="list-group-item d-flex align-items-center bg-transparent border-secondary ps-0 pe-0">
                 <img src="${item.image}" alt="${item.name}" class="cart-item-img me-3">
                 <div class="flex-grow-1">
-                    <h6 class="mb-0 brand-font text-heading">${item.name}</h6>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h6 class="mb-0 brand-font text-heading small">${item.name}</h6>
+                        <button onclick="removeFromCart(${item.id})" class="btn btn-sm text-danger border-0 p-0" title="Remove Item">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                     <div class="d-flex justify-content-between align-items-center mt-2">
                         <div class="btn-group btn-group-sm border border-secondary">
                              <button class="btn btn-outline-secondary border-0" onclick="changeQty(${item.id}, -1)">-</button>
-                             <button class="btn btn-outline-secondary border-0 disabled text-dark">${item.qty}</button>
+                             <button class="btn btn-outline-secondary border-0 disabled text-dark" style="min-width: 30px;">${item.qty}</button>
                              <button class="btn btn-outline-secondary border-0" onclick="changeQty(${item.id}, 1)">+</button>
                         </div>
-                        <span class="text-gold">$${itemTotal.toFixed(2)}</span>
+                        <span class="text-gold small fw-bold">$${itemTotal.toFixed(2)}</span>
                     </div>
                 </div>
             </li>
@@ -602,15 +770,28 @@ function updateCartUI() {
     totalEl.innerText = '$' + total.toFixed(2);
 }
 
+// Remove single item from cart (Cart se ek cheez hatayein)
+function removeFromCart(id) {
+    const itemIndex = cart.findIndex(item => item.id === id);
+    if (itemIndex > -1) {
+        const itemName = cart[itemIndex].name;
+        cart.splice(itemIndex, 1);
+        saveCart();
+        updateCartUI();
+        showToast(`Removed ${itemName} from cart`);
+    }
+}
+
 // Checkout function (Order mukammal karein aur cart khali karein)
 function checkout() {
     if (cart.length === 0) {
-        showToast("Your cart is empty!");
+        showToast("Your cart is empty!", "error");
         return;
     }
+    // Ensure we clear any previous buy-now item
+    localStorage.removeItem('paarees-buy-now');
     showToast("Proceeding to Checkout...");
-    cart = []; // Empty the cart
-    updateCartUI(); // Update UI
+    window.location.href = 'checkout.html';
 }
 
 /* ==========================================================================
@@ -678,22 +859,56 @@ function downloadDetails(id) {
     const absoluteImgPath = new URL(product.image, window.location.href).href;
 
     const content = `
-        <div style="font-family: Arial; padding: 20px;">
-            <h1 style="color: #D4AF37;">${product.name}</h1>
-            <p><strong>Brand:</strong> ${product.brand}</p>
-            <p><strong>Price:</strong> ${product.price}</p>
-            <img src="${absoluteImgPath}" width="200">
-            <p>100% Authentic Imported Perfume.</p>
+        <div style="font-family: 'Times New Roman', serif; padding: 40px; color: #333; line-height: 1.6;">
+            <div style="text-align: center; border-bottom: 2px solid #D4AF37; padding-bottom: 20px; margin-bottom: 30px;">
+                <h1 style="color: #D4AF37; margin: 0; font-size: 28pt;">PAAREES PERFUMES</h1>
+                <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 10pt; color: #666;">The Essence of Luxury • Paris</p>
+            </div>
+
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 320px; vertical-align: top;">
+                        <img src="${absoluteImgPath}" width="300" height="300" style="border: 2px solid #D4AF37; padding: 10px;">
+                    </td>
+                    <td style="vertical-align: top; padding-left: 40px;">
+                        <h2 style="color: #111; margin-top: 0; font-size: 26pt; border-bottom: 1px solid #eee; padding-bottom: 10px;">${product.name}</h2>
+                        <p style="color: #D4AF37; font-weight: bold; font-size: 22pt; margin: 20px 0;">${product.price}</p>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                            <tr><td style="padding: 12px 0; border-bottom: 1px solid #eee; color: #666;"><strong>BRAND</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">${product.brand}</td></tr>
+                            <tr><td style="padding: 12px 0; border-bottom: 1px solid #eee; color: #666;"><strong>COLLECTION</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">${product.category}</td></tr>
+                            <tr><td style="padding: 12px 0; border-bottom: 1px solid #eee; color: #666;"><strong>VOLUME</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">${product.specs.volume}</td></tr>
+                            <tr><td style="padding: 12px 0; border-bottom: 1px solid #eee; color: #666;"><strong>TYPE</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">${product.specs.type}</td></tr>
+                            <tr><td style="padding: 12px 0; border-bottom: 1px solid #eee; color: #666;"><strong>ORIGIN</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">${product.specs.origin}</td></tr>
+                            <tr><td style="padding: 12px 0; border-bottom: 1px solid #eee; color: #666;"><strong>LONGEVITY</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #eee; text-align: right;">${product.specs.longevity}</td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <div style="margin-top: 50px;">
+                <h3 style="border-bottom: 2px solid #D4AF37; padding-bottom: 10px; color: #111;">Detailed Product Analysis</h3>
+                <p style="text-align: justify; white-space: pre-line; line-height: 1.8; font-size: 11pt;">${product.fullDescription}</p>
+            </div>
+
+            <div style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border: 1px dashed #D4AF37; text-align: center;">
+                <p style="margin: 0; font-weight: bold;">100% AUTHENTICITY GUARANTEED</p>
+                <p style="margin: 5px 0 0 0; font-size: 9pt;">This document serves as the official specification sheet for the ${product.name}.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; font-size: 9pt; color: #888;">
+                <p>&copy; 2026 Paarees Perfumes. All Rights Reserved. www.paareesperfumes.com</p>
+            </div>
         </div>
     `;
 
-    const header = "<html><body>";
+    const header = "<html><head><meta charset='utf-8'></head><body>";
     const footer = "</body></html>";
     const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(header + content + footer);
     
     const fileDownload = document.createElement("a");
     fileDownload.href = source;
-    fileDownload.download = `${product.name}_Specs.doc`;
+    fileDownload.download = `${product.name.replace(/ /g, '_')}_Specifications.doc`;
     fileDownload.click();
 }
 
@@ -750,8 +965,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderFooter();
         renderFilters();
         renderProducts();
+        renderProductDetail();
         renderFullGallery();
         initContactForm();
+        updateCartUI();
         
         // Start animation tracking
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));

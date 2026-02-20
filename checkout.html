@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | PAAREES</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .checkout-section { padding-top: 150px; padding-bottom: 80px; }
+        .checkout-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 15px; padding: 30px; }
+        .form-control { background: var(--bg-body); border-color: var(--glass-border); color: var(--text-main); border-radius: 10px; padding: 12px 15px; }
+        .form-control:focus { background: var(--bg-body); border-color: var(--gold); box-shadow: none; color: var(--text-main); }
+        
+        /* Lightened Placeholders */
+        .form-control::placeholder { color: rgba(128, 128, 128, 0.3) !important; font-weight: 300; }
+        
+        .payment-option { border: 1px solid var(--glass-border); border-radius: 10px; padding: 15px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
+        .payment-option:hover, .payment-option.active { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
+        
+        .error-msg { color: #dc3545; font-size: 0.75rem; margin-top: 5px; display: none; }
+        #card-details-form { display: none; margin-top: 20px; padding: 20px; border: 1px dashed var(--glass-border); border-radius: 10px; }
+    </style>
+</head>
+<body id="top">
+
+    <!-- 1. Navbar Container (Dynamic) -->
+    <div id="navbar-container"></div>
+
+    <section class="checkout-section">
+        <div class="container">
+            <div class="section-header mb-5">
+                <p>Secure Transaction</p>
+                <h2 class="brand-font">Checkout</h2>
+                <div class="divider"></div>
+            </div>
+
+            <div class="row g-5">
+                <!-- Shipping Details -->
+                <div class="col-lg-7">
+                    <div class="checkout-card animate__animated animate__fadeInLeft">
+                        <h5 class="brand-font mb-4"><i class="fas fa-truck me-2 text-gold"></i> Shipping Details</h5>
+                        <form id="shipping-form">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="small text-uppercase letter-spacing-1 mb-2">First Name</label>
+                                    <input type="text" id="fname" class="form-control" placeholder="John" required>
+                                    <div class="error-msg" id="err-fname">Enter valid name (Alphabets only).</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small text-uppercase letter-spacing-1 mb-2">Last Name</label>
+                                    <input type="text" id="lname" class="form-control" placeholder="Doe" required>
+                                    <div class="error-msg" id="err-lname">Enter valid name (Alphabets only).</div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="small text-uppercase letter-spacing-1 mb-2">Shipping Address</label>
+                                    <input type="text" id="address" class="form-control" placeholder="123 Luxury Ave, Paris, France" required>
+                                    <div class="error-msg" id="err-address">Please enter your complete address.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small text-uppercase letter-spacing-1 mb-2">Email Address</label>
+                                    <input type="email" id="email" class="form-control" placeholder="john@example.com" required>
+                                    <div class="error-msg" id="err-email">Enter a valid email address.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small text-uppercase letter-spacing-1 mb-2">Phone Number</label>
+                                    <input type="tel" id="phone" class="form-control" placeholder="03XXXXXXXXX" required>
+                                    <div class="error-msg" id="err-phone">Enter a valid phone number.</div>
+                                </div>
+                            </div>
+
+                            <h5 class="brand-font mb-4 mt-5"><i class="fas fa-credit-card me-2 text-gold"></i> Payment Method</h5>
+                            <div class="payment-options">
+                                <div class="payment-option active d-flex align-items-center" onclick="selectPayment('cod', this)">
+                                    <input type="radio" name="payment" id="pay-cod" checked class="me-3">
+                                    <div>
+                                        <div class="fw-bold">Cash on Delivery</div>
+                                        <small class="text-muted">Pay when you receive your order.</small>
+                                    </div>
+                                    <i class="fas fa-money-bill-wave ms-auto text-gold"></i>
+                                </div>
+                                <div class="payment-option d-flex align-items-center" onclick="selectPayment('card', this)">
+                                    <input type="radio" name="payment" id="pay-card" class="me-3">
+                                    <div>
+                                        <div class="fw-bold">Credit / Debit Card</div>
+                                        <small class="text-muted">Secure payment via Paarees Gateway.</small>
+                                    </div>
+                                    <i class="fas fa-credit-card ms-auto text-gold"></i>
+                                </div>
+                            </div>
+
+                            <!-- Card Details Sub-form -->
+                            <div id="card-details-form">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="small text-uppercase letter-spacing-1 mb-2">Cardholder Name</label>
+                                        <input type="text" id="card-name" class="form-control" placeholder="FULL NAME">
+                                        <div class="error-msg" id="err-card-name">Enter name on card (Letters only).</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="small text-uppercase letter-spacing-1 mb-2">Card Number</label>
+                                        <input type="text" id="card-number" class="form-control" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                                        <div class="error-msg" id="err-card-num">Enter 16-digit card number.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small text-uppercase letter-spacing-1 mb-2">Expiry Date</label>
+                                        <input type="text" id="card-expiry" class="form-control" placeholder="MM/YY" maxlength="5">
+                                        <div class="error-msg" id="err-card-expiry">Enter valid expiry (MM/YY).</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="small text-uppercase letter-spacing-1 mb-2">CVV</label>
+                                        <input type="password" id="card-cvv" class="form-control" placeholder="***" maxlength="3">
+                                        <div class="error-msg" id="err-card-cvv">Enter 3-digit CVV.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-5">
+                    <div class="checkout-card animate__animated animate__fadeInRight">
+                        <h5 class="brand-font mb-4"><i class="fas fa-shopping-bag me-2 text-gold"></i> Order Summary</h5>
+                        <div id="checkout-items" class="mb-4">
+                            <!-- Items Injected by JS -->
+                        </div>
+                        <div class="border-top border-secondary pt-3 mt-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Subtotal</span>
+                                <span id="checkout-subtotal">$0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Shipping</span>
+                                <span class="text-success">FREE</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3 pt-3 border-top border-secondary">
+                                <strong class="brand-font">Total Amount</strong>
+                                <strong id="checkout-total" class="text-gold fs-5">$0.00</strong>
+                            </div>
+                        </div>
+                        <button class="btn-gold w-100 py-3 mt-4" id="checkout-btn" onclick="validateAndProcess()">BUY NOW</button>
+                        
+                        <div class="text-center mt-4">
+                            <p class="small text-muted"><i class="fas fa-lock me-2"></i> Your data is protected by industry-standard encryption.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container (Dynamic) -->
+    <div id="footer-container"></div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-card border-gold p-4 text-center">
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-gold fa-5x animate__animated animate__bounceIn"></i>
+                    </div>
+                    <h3 class="brand-font text-heading mb-3" id="modal-title">Order Placed Successfully!</h3>
+                    <p class="text-muted mb-4" id="modal-msg">Your luxury fragrance is being prepared. You will receive a confirmation email shortly.</p>
+                    <button class="btn-gold px-5" onclick="window.location.href='index.html'">CONTINUE SHOPPING</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        let checkoutItems = [];
+        let selectedPaymentMethod = 'cod';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCheckoutSummary();
+            
+            // Auto-format Card Number
+            const cardNumInput = document.getElementById('card-number');
+            if(cardNumInput) {
+                cardNumInput.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+                });
+            }
+
+            // Auto-format Expiry
+            const expiryInput = document.getElementById('card-expiry');
+            if(expiryInput) {
+                expiryInput.addEventListener('input', (e) => {
+                    let val = e.target.value.replace(/\D/g, '');
+                    if (val.length > 2) val = val.substring(0,2) + '/' + val.substring(2,4);
+                    e.target.value = val;
+                });
+            }
+        });
+
+        function selectPayment(method, element) {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            element.querySelector('input').checked = true;
+            document.getElementById('card-details-form').style.display = (method === 'card') ? 'block' : 'none';
+            
+            // Update button text
+            const btn = document.getElementById('checkout-btn');
+            btn.innerText = (method === 'card') ? 'PAY NOW' : 'BUY NOW';
+        }
+
+        function validateAndProcess() {
+            let isValid = true;
+            document.querySelectorAll('.error-msg').forEach(e => e.style.display = 'none');
+
+            const fname = document.getElementById('fname');
+            const lname = document.getElementById('lname');
+            const address = document.getElementById('address');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+
+            // Name: Only Alphabets
+            if (!/^[a-zA-Z\s]{2,30}$/.test(fname.value.trim())) { document.getElementById('err-fname').style.display = 'block'; isValid = false; }
+            if (!/^[a-zA-Z\s]{2,30}$/.test(lname.value.trim())) { document.getElementById('err-lname').style.display = 'block'; isValid = false; }
+            
+            // Address: Min 10 chars (alphabets + numbers)
+            if (address.value.trim().length < 10) { document.getElementById('err-address').style.display = 'block'; isValid = false; }
+            
+            // Email: Format
+            if (!/^\S+@\S+\.\S+$/.test(email.value.trim())) { document.getElementById('err-email').style.display = 'block'; isValid = false; }
+            
+            // Phone: Only numbers (10-15)
+            if (!/^\d{10,15}$/.test(phone.value.replace(/\D/g, ''))) { document.getElementById('err-phone').style.display = 'block'; isValid = false; }
+
+            // Card details validation if selected
+            if (selectedPaymentMethod === 'card') {
+                const cName = document.getElementById('card-name');
+                const cNum = document.getElementById('card-number');
+                const cExp = document.getElementById('card-expiry');
+                const cCvv = document.getElementById('card-cvv');
+
+                if (!/^[a-zA-Z\s]{3,30}$/.test(cName.value.trim())) { document.getElementById('err-card-name').style.display = 'block'; isValid = false; }
+                if (cNum.value.replace(/\s/g, '').length !== 16) { document.getElementById('err-card-num').style.display = 'block'; isValid = false; }
+                if (!/^\d{2}\/\d{2}$/.test(cExp.value)) { document.getElementById('err-card-expiry').style.display = 'block'; isValid = false; }
+                if (cCvv.value.length !== 3) { document.getElementById('err-card-cvv').style.display = 'block'; isValid = false; }
+            }
+
+            if (isValid) {
+                // Set modal text based on payment method
+                const modalTitle = document.getElementById('modal-title');
+                const modalMsg = document.getElementById('modal-msg');
+                
+                if (selectedPaymentMethod === 'card') {
+                    modalTitle.innerText = "Payment Accepted!";
+                    modalMsg.innerText = "Your payment has been processed. Thank you for choosing Paarees Perfumes.";
+                } else {
+                    modalTitle.innerText = "Order Placed Successfully!";
+                    modalMsg.innerText = "Your luxury fragrance is being prepared. You will receive a confirmation email shortly.";
+                }
+
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                modal.show();
+                
+                // Finalize Purchase
+                const buyNowItem = JSON.parse(localStorage.getItem('paarees-buy-now'));
+                if (buyNowItem) {
+                    const idx = cart.findIndex(i => i.id === buyNowItem.id);
+                    if (idx > -1) { cart.splice(idx, 1); saveCart(); }
+                    localStorage.removeItem('paarees-buy-now');
+                } else {
+                    cart = [];
+                    saveCart();
+                }
+                updateCartUI();
+            } else {
+                showToast("Please fix the errors in the form.", "error");
+            }
+        }
+
+        function renderCheckoutSummary() {
+            const container = document.getElementById('checkout-items');
+            const subtotalEl = document.getElementById('checkout-subtotal');
+            const totalEl = document.getElementById('checkout-total');
+            
+            const buyNowItem = JSON.parse(localStorage.getItem('paarees-buy-now'));
+            checkoutItems = buyNowItem ? [buyNowItem] : cart;
+
+            if (!container || checkoutItems.length === 0) {
+                if (container) container.innerHTML = '<p class="text-center text-muted">Your order summary is empty.</p>';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            checkoutItems.forEach(item => {
+                const priceVal = parseFloat(item.price.replace('$',''));
+                const itemTotal = priceVal * item.qty;
+                total += itemTotal;
+                html += `
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${item.image}" alt="${item.name}" width="50" class="me-3 rounded border">
+                        <div class="flex-grow-1">
+                            <div class="small fw-bold text-heading">${item.name}</div>
+                            <div class="small text-muted">Qty: ${item.qty}</div>
+                        </div>
+                        <div class="small text-gold fw-bold">$${itemTotal.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            subtotalEl.innerText = '$' + total.toFixed(2);
+            totalEl.innerText = '$' + total.toFixed(2);
+        }
+    </script>
+</body>
+</html>
